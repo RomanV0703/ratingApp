@@ -745,7 +745,7 @@ namespace ratingApp
 
         private void ShowPopUp(object sender, RoutedEventArgs e)
         {
-            var margin = new Thickness(7,7,7,0);
+            var margin = 7;
 
             moviePoster.Source = null;
             var dataGridRow = e.Source as DataGridRow;
@@ -753,10 +753,10 @@ namespace ratingApp
 
             movieName.MaxWidth = 100;
             movieName.Text = selectedItem.Name;
-            movieName.Margin = margin;
+            movieName.Margin = new Thickness(margin);
 
             movieYear.Text = selectedItem.Year;
-            movieYear.Margin = margin;
+            movieYear.Margin = new Thickness(margin, 0, margin, margin);
 
             if (selectedItem.Poster != null && selectedItem.Poster != string.Empty && selectedItem.Poster != "N/A")
             {
@@ -765,13 +765,13 @@ namespace ratingApp
                 logo.UriSource = new Uri(selectedItem.Poster);                
                 logo.EndInit();
                 moviePoster.Source = logo;
-                moviePoster.Margin = margin;
+                moviePoster.Margin = new Thickness(margin, 0, margin, margin);
                 moviePoster.MaxWidth = 100;
             }
 
             moviePlot.MaxWidth = 120;
             moviePlot.Text = selectedItem.Plot;
-            moviePlot.Margin = margin;                        
+            moviePlot.Margin = new Thickness(margin/2, margin, margin, margin);                        
 
             popUp.PlacementTarget = dataGridRow;
             popUp.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
