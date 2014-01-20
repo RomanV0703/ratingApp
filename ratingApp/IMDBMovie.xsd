@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="movie" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="title" type="xs:string" />
+            <xs:attribute name="year" type="xs:string" />
+            <xs:attribute name="rated" type="xs:string" />
+            <xs:attribute name="released" type="xs:string" />
+            <xs:attribute name="runtime" type="xs:string" />
+            <xs:attribute name="genre" type="xs:string" />
+            <xs:attribute name="director" type="xs:string" />
+            <xs:attribute name="writer" type="xs:string" />
+            <xs:attribute name="actors" type="xs:string" />
+            <xs:attribute name="plot" type="xs:string" />
+            <xs:attribute name="language" type="xs:string" />
+            <xs:attribute name="country" type="xs:string" />
+            <xs:attribute name="awards" type="xs:string" />
+            <xs:attribute name="poster" type="xs:string" />
+            <xs:attribute name="metascore" type="xs:string" />
+            <xs:attribute name="imdbRating" type="xs:string" />
+            <xs:attribute name="imdbVotes" type="xs:string" />
+            <xs:attribute name="imdbID" type="xs:string" />
+            <xs:attribute name="type" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="response" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="root" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
