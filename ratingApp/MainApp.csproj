@@ -86,9 +86,6 @@
       <DependentUpon>IMDBMovie.xsd</DependentUpon>
     </Compile>
     <Compile Include="IMDBMovie.cs" />
-    <Compile Include="PopUp.xaml.cs">
-      <DependentUpon>PopUp.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
@@ -110,10 +107,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PopUp.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Options.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

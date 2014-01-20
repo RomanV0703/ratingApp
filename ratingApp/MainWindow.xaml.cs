@@ -669,7 +669,8 @@ namespace ratingApp
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {            
-            this.MinHeight = 590;
+            this.MinHeight = 650;
+            this.MaxHeight = 800;
 
             List<RutrackerLink> links = new List<RutrackerLink>();
 
@@ -744,16 +745,18 @@ namespace ratingApp
 
         private void ShowPopUp(object sender, RoutedEventArgs e)
         {
+            var margin = new Thickness(7,7,7,0);
+
             moviePoster.Source = null;
             var dataGridRow = e.Source as DataGridRow;
             var selectedItem = dataGridRow.Item as Movie;
 
-            movieName.Width = 100;
+            movieName.MaxWidth = 100;
             movieName.Text = selectedItem.Name;
-            movieName.Margin = new Thickness(12, 12, 12, 12);
+            movieName.Margin = margin;
 
             movieYear.Text = selectedItem.Year;
-            movieYear.Margin = new Thickness(12, 52, 12, 12);
+            movieYear.Margin = margin;
 
             if (selectedItem.Poster != null && selectedItem.Poster != string.Empty && selectedItem.Poster != "N/A")
             {
@@ -762,13 +765,13 @@ namespace ratingApp
                 logo.UriSource = new Uri(selectedItem.Poster);                
                 logo.EndInit();
                 moviePoster.Source = logo;
-                moviePoster.Margin = new Thickness(12, 76, 12, 12);
+                moviePoster.Margin = margin;
                 moviePoster.MaxWidth = 100;
             }
 
-            moviePlot.Width = 120;
+            moviePlot.MaxWidth = 120;
             moviePlot.Text = selectedItem.Plot;
-            moviePlot.Margin = new Thickness(126, 12, 12, 12);                        
+            moviePlot.Margin = margin;                        
 
             popUp.PlacementTarget = dataGridRow;
             popUp.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
