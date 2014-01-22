@@ -21,6 +21,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.Windows.Controls.Primitives;
 
 namespace ratingApp
 {
@@ -743,8 +744,17 @@ namespace ratingApp
             dataGrid1.ItemsSource = final_list;
         }
 
+        DispatcherTimer popupTimer = new DispatcherTimer(DispatcherPriority.Normal);
+
+        Point cursorPositionInit = new Point();
+
         private void ShowPopUp(object sender, RoutedEventArgs e)
         {
+            cursorPositionInit = Mouse.GetPosition(this);
+
+            popUp.HorizontalOffset = 0;
+            popUp.VerticalOffset = 0;
+
             var margin = 7;
 
             moviePoster.Source = null;
@@ -775,17 +785,31 @@ namespace ratingApp
 
             popUp.PlacementTarget = dataGridRow;
             popUp.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
-            popUp.IsOpen = true;
+            
+            popupTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            popupTimer.Tick += (obj, args) =>
+            {
+                popUp.IsOpen = true;
+            };
+            popupTimer.Start();
         }
 
         private void HidePopUp(object sender, RoutedEventArgs e)
         {
             popUp.IsOpen = false;
+            popupTimer.Stop();
         }
 
-        private void popUp_Opened(object sender, EventArgs e)
+        private void MovePopUp(object sender, RoutedEventArgs e)
         {
+            var cursorPositionNow = Mouse.GetPosition(this);
 
+            var deltaPoint = cursorPositionNow - cursorPositionInit;
+
+            popUp.HorizontalOffset += deltaPoint.X;
+            popUp.VerticalOffset += deltaPoint.Y;
+
+            cursorPositionInit = cursorPositionNow;
         }
 
         int page;
