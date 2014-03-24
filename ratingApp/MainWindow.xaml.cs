@@ -22,6 +22,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
+using System.Net;
 
 namespace ratingApp
 {
@@ -484,9 +485,23 @@ namespace ratingApp
                 OverrideEncoding = Encoding.GetEncoding("windows-1251")
             };
 
-            var document = webGet.Load(url);
+            HtmlDocument document = null;
+            try
+            {
+                document = webGet.Load(url);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
 
-            var nodes = document.DocumentNode.SelectNodes("//td[@class='tt']/a");
+            HtmlNodeCollection nodes = null;
+
+            if (document != null)
+            {
+                nodes = document.DocumentNode.SelectNodes("//td[@class='tt']/a");
+            }
 
             if (nodes == null)
             {                
