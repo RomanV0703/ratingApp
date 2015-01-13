@@ -49,8 +49,8 @@
         <Label Height="28" HorizontalAlignment="Left" Margin="311,56,0,0" Name="label3" VerticalAlignment="Top" Content="Page №" />
         <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="12,86,0,0" Name="label4" VerticalAlignment="Top" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="12,111,0,0" Name="textBox_name" VerticalAlignment="Top" Width="129" TextChanged="textBox_name_TextChanged" />
-        <ListBox Height="71" HorizontalAlignment="Left" Margin="12,164,0,0" Name="listBox_videoQuality" VerticalAlignment="Top" Width="129" SelectionMode="Multiple" SelectionChanged="listBox_videoQuality_SelectionChanged" />
-        <ListBox Height="89" HorizontalAlignment="Left" Margin="14,430,0,0" Name="listBox_years" VerticalAlignment="Top" Width="129" SelectionMode="Multiple" SelectionChanged="listBox_years_SelectionChanged" />
+        <ListBox Height="71" HorizontalAlignment="Left" Margin="12,164,0,0" Name="listBox_videoQuality" VerticalAlignment="Top" Width="129" SelectionMode="Multiple" SelectionChanged="listBox_filter_SelectionChanged" />
+        <ListBox Height="89" HorizontalAlignment="Left" Margin="14,430,0,0" Name="listBox_years" VerticalAlignment="Top" Width="129" SelectionMode="Multiple" SelectionChanged="listBox_filter_SelectionChanged" />
         <Button Content="Select all" Height="23" HorizontalAlignment="Left" Margin="12,241,0,0" Name="button_selectAllVideo" VerticalAlignment="Top" Width="129" Click="select_all_qualities_btn_Click" />
         <Button Content="Select all" Height="23" HorizontalAlignment="Left" Margin="12,525,0,0" Name="button_selectAllYears" VerticalAlignment="Top" Width="129" Click="select_all_years_btn_Click" />
         
@@ -58,7 +58,7 @@
             <MenuItem Header="File">
                 <MenuItem Header="Close" Click="menuItemClose_Click"/>
             </MenuItem>
-            <MenuItem Header="Edit" Visibility="Visible" IsEnabled="False">
+            <MenuItem Header="Edit" Visibility="Visible" IsEnabled="True">
                 <MenuItem Header="Options" Click="menuItemOptions_Click"/>
             </MenuItem>
             <MenuItem Header="Other">
@@ -68,7 +68,7 @@
         
         <Label Content="0" Height="28" HorizontalAlignment="Left" Margin="438,56,0,0" Name="label5" VerticalAlignment="Top" />
         <Label Content="audioQuality" Height="28" HorizontalAlignment="Left" Margin="12,270,0,0" Name="label6" VerticalAlignment="Top" />
-        <ListBox Height="71" HorizontalAlignment="Left" Margin="12,298,0,0" Name="listBox_audioQuality" SelectionMode="Multiple" VerticalAlignment="Top" Width="129" SelectionChanged="listBox_audioQuality_SelectionChanged" />
+        <ListBox Height="71" HorizontalAlignment="Left" Margin="12,298,0,0" Name="listBox_audioQuality" SelectionMode="Multiple" VerticalAlignment="Top" Width="129" SelectionChanged="listBox_filter_SelectionChanged" />
         <Button Content="Select all" Height="23" HorizontalAlignment="Left" Margin="12,375,0,0" Name="button_selectAllAudio" VerticalAlignment="Top" Width="129" Click="button_selectAllAudio_Click" />
         <Button Content="Debug" Height="23" Margin="0,59,12,0" Name="button_debugWindow" VerticalAlignment="Top" Click="button_debugWindow_Click" HorizontalAlignment="Right" Width="75" IsEnabled="False" />
         <TextBox Height="22" HorizontalAlignment="Left" Margin="366,59,0,0" Name="textBox1" VerticalAlignment="Top" Width="22" TextChanged="textBox1_TextChanged" Text="" GotMouseCapture="textBox1_GotMouseCapture" />

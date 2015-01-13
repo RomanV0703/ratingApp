@@ -24,95 +24,55 @@ namespace ratingApp
             InitializeComponent();
         }
 
-        string configPath = @".\config.ini";
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MainWindow mainWindow = Owner as MainWindow;
 
-            int i = 0;
-            string line;
-            
-            var file = new StreamReader(configPath);
+            checkBoxName.IsChecked = Properties.Settings.Default.ColumnsName;
+            checkBoxNameRussian.IsChecked = Properties.Settings.Default.ColumnsNameRussian;
+            checkBoxYear.IsChecked = Properties.Settings.Default.ColumnsYear;
+            checkBoxRating.IsChecked = Properties.Settings.Default.ColumnsRating;
+            checkBoxLink.IsChecked = Properties.Settings.Default.ColumnsLink;
+            checkBoxVideoQuality.IsChecked = Properties.Settings.Default.ColumnsVideoQuality;
+            checkBoxAudioQuality.IsChecked = Properties.Settings.Default.ColumnsAudioQuality;
+            checkBoxPlot.IsChecked = Properties.Settings.Default.ColumnsPlot;
+            checkBoxPoster.IsChecked = Properties.Settings.Default.ColumnsPoster;            
 
-            var options = new string[10];
-
-            while ((line = file.ReadLine()) != null)
+            foreach (CheckBox checkBox in grid1.Children)
             {
-                options[i] = line;
-                i++;
-            }
-
-            file.Close();
-
-            int n = 0;
-
-            foreach (var column in mainWindow.dataGrid1.Columns)
-            {
-                var columnCheckBox = new CheckBox();
-                columnCheckBox.Content = column.Header;
-
-                foreach (var item in options)
-                {
-                    if (item.ToLower().Contains(column.Header.ToString().ToLower()))
-                    {
-                        if (item.ToLower().Contains("show"))
-                        {
-                            columnCheckBox.IsChecked = true;
-                        }
-
-                        else
-                        {
-                            columnCheckBox.IsChecked = false;
-                        }
-                    }
-                }
-
-                columnCheckBox.Margin = new Thickness(0, n, 0, 0);
-                columnCheckBox.Checked += new RoutedEventHandler(columnCheckBox_Checked);
-                columnCheckBox.Unchecked += new RoutedEventHandler(columnCheckBox_Unhecked);
-
-                grid2.Children.Add(columnCheckBox);
-                //groupBox1.chil
-                n += 20;
-                //columnCheckBox.SetBinding(ToggleButton.IsCheckedProperty, "DataItem.IsChecked");
+                checkBox.Checked += new RoutedEventHandler(checkBox_Checked);
+                checkBox.Unchecked += new RoutedEventHandler(checkBox_Unhecked);
             }
         }
 
-        private void columnCheckBox_Checked(object sender, RoutedEventArgs e)
+        private void hideColumns()
         {
+            Properties.Settings.Default.ColumnsName = (bool)checkBoxName.IsChecked;
+            Properties.Settings.Default.ColumnsNameRussian = (bool)checkBoxNameRussian.IsChecked;
+            Properties.Settings.Default.ColumnsYear = (bool)checkBoxYear.IsChecked;
+            Properties.Settings.Default.ColumnsRating = (bool)checkBoxRating.IsChecked;
+            Properties.Settings.Default.ColumnsLink = (bool)checkBoxLink.IsChecked;
+            Properties.Settings.Default.ColumnsVideoQuality = (bool)checkBoxVideoQuality.IsChecked;
+            Properties.Settings.Default.ColumnsAudioQuality = (bool)checkBoxAudioQuality.IsChecked;
+            Properties.Settings.Default.ColumnsPlot = (bool)checkBoxPlot.IsChecked;
+            Properties.Settings.Default.ColumnsPoster = (bool)checkBoxPoster.IsChecked;
+
+            Properties.Settings.Default.Save();
+
             MainWindow mainWindow = Owner as MainWindow;
-            var checkBox = e.Source as CheckBox;
-
-            foreach (var column in mainWindow.dataGrid1.Columns)
-            {
-                if (column.Header == checkBox.Content)
-                {
-                    var file = File.ReadAllText(configPath);
-
-                    file = file.Replace(column.Header.ToString() + " = hide", column.Header.ToString() + " = show");
-
-                    File.WriteAllText(configPath, file);
-                }
-            }
+            mainWindow.hideColumns();
         }
 
-        private void columnCheckBox_Unhecked(object sender, RoutedEventArgs e)
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = Owner as MainWindow;
-            var checkBox = e.Source as CheckBox;
-
-            foreach (var column in mainWindow.dataGrid1.Columns)
-            {
-                if (column.Header == checkBox.Content)
-                {
-                    var file = File.ReadAllText(configPath);
-
-                    file = file.Replace(column.Header.ToString() + " = show", column.Header.ToString() + " = hide");
-
-                    File.WriteAllText(configPath, file);                    
-                }
-            }
+            hideColumns();
         }
+
+        private void checkBox_Unhecked(object sender, RoutedEventArgs e)
+        {
+            hideColumns();
+        }
+
     }
 }

@@ -1,13 +1,23 @@
 ﻿<Window x:Class="ratingApp.Window2"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Options" Height="290" Width="250" ResizeMode="NoResize" Loaded="Window_Loaded" Name="Options" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="138" d:DesignWidth="256" SizeToContent="Height" WindowStartupLocation="CenterOwner">
+        Title="Options" Height="472" Width="547" ResizeMode="NoResize" Loaded="Window_Loaded" Name="Options" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="138" d:DesignWidth="256" WindowStartupLocation="CenterOwner">
     <Grid>
-        <Grid Height="Auto" HorizontalAlignment="Left" Margin="12,12,0,0" Name="grid1" VerticalAlignment="Top" Width="200"></Grid>
-        <GroupBox Header="Columns" Height="Auto" HorizontalAlignment="Left" Margin="12" Name="groupBox1" VerticalAlignment="Top" Width="200">
-            <Grid>
-                <Grid Height="Auto" HorizontalAlignment="Left" Margin="6,6,0,0" Name="grid2" VerticalAlignment="Top" Width="200" />
+        <GroupBox Header="Columns" Margin="12,12,362,195" Name="groupBoxColumns">
+            <Grid Name="grid1">
+                <CheckBox Content="Name" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="checkBoxName" VerticalAlignment="Top" />
+                <CheckBox Content="NameRussian " Height="16" HorizontalAlignment="Left" Margin="6,28,0,0" Name="checkBoxNameRussian" VerticalAlignment="Top" />
+                <CheckBox Content="Year " Height="16" HorizontalAlignment="Left" Margin="6,50,0,0" Name="checkBoxYear" VerticalAlignment="Top" />
+                <CheckBox Content="Rating " Height="16" HorizontalAlignment="Left" Margin="6,72,0,0" Name="checkBoxRating" VerticalAlignment="Top" />
+                <CheckBox Content="Link " Height="16" HorizontalAlignment="Left" Margin="6,94,0,0" Name="checkBoxLink" VerticalAlignment="Top" />
+                <CheckBox Content="videoQuality " Height="16" HorizontalAlignment="Left" Margin="6,116,0,0" Name="checkBoxVideoQuality" VerticalAlignment="Top" />
+                <CheckBox Content="audioQuality " Height="16" HorizontalAlignment="Left" Margin="6,138,0,0" Name="checkBoxAudioQuality" VerticalAlignment="Top" />
+                <CheckBox Content="Plot " Height="16" HorizontalAlignment="Left" Margin="6,160,0,0" Name="checkBoxPlot" VerticalAlignment="Top" />
+                <CheckBox Content="Poster " Height="16" HorizontalAlignment="Left" Margin="6,182,0,0" Name="checkBoxPoster" VerticalAlignment="Top" />
             </Grid>
+        </GroupBox>
+        <GroupBox Header="VideoQuality" Height="226" Margin="0,12,156,0" Name="groupBoxVideoQuality" VerticalAlignment="Top" HorizontalAlignment="Right" Width="200">
+            <Grid />
         </GroupBox>
     </Grid>
 </Window>

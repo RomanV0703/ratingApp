@@ -31,7 +31,7 @@ namespace ratingApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        string configPath = @".\config.ini";
+        //string configPath = @".\config.ini";
 
         public MainWindow()
         {
@@ -47,10 +47,10 @@ namespace ratingApp
 
             //File.Delete(configPath);
 
-            if (File.Exists(configPath) == false)
-            {
-                createConfig();
-            } 
+            //if (File.Exists(configPath) == false)
+            //{
+            //    createConfig();
+            //} 
                                  
         }
 
@@ -66,40 +66,40 @@ namespace ratingApp
         }
         #endregion
 
-        void createConfig()
-        {
-            //File.CreateText(configPath);
+        //void createConfig()
+        //{
+        //    //File.CreateText(configPath);
 
-            //if (File.Exists(configPath) == false)
-            //{
-            //    File.CreateText(configPath);
-            //}
+        //    //if (File.Exists(configPath) == false)
+        //    //{
+        //    //    File.CreateText(configPath);
+        //    //}
 
-            var options = new string[11];
+        //    var options = new string[11];
 
-            options[0] = "[Columns]";
-            options[1] = "";
+        //    options[0] = "[Columns]";
+        //    options[1] = "";
 
-            int i = 2;
+        //    int i = 2;
 
-            foreach (var property in typeof(Movie).GetProperties())
-            {
-                options[i] = property.Name + " = " + "show";
-                if (property.Name == "Poster" || property.Name == "Plot")
-                {
-                    options[i] = property.Name + " = " + "hide";
-                }
-                i++;
-            }
+        //    foreach (var property in typeof(Movie).GetProperties())
+        //    {
+        //        options[i] = property.Name + " = " + "show";
+        //        if (property.Name == "Poster" || property.Name == "Plot")
+        //        {
+        //            options[i] = property.Name + " = " + "hide";
+        //        }
+        //        i++;
+        //    }
 
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(configPath))
-            {
-                foreach (string line in options)
-                {
-                    file.WriteLine(line);
-                }
-            }
-        }
+        //    using (System.IO.StreamWriter file = new System.IO.StreamWriter(configPath))
+        //    {
+        //        foreach (string line in options)
+        //        {
+        //            file.WriteLine(line);
+        //        }
+        //    }
+        //}
 
         void MainWindow_Closed(object sender, System.EventArgs e)
         {
@@ -132,16 +132,14 @@ namespace ratingApp
             public string Content { get; set; }
         }
 
-        List<Movie> videoQualityfilterResult = new List<Movie>();
-        List<Movie> audioQualityfilterResult = new List<Movie>();
-        List<Movie> yearsfilterResult = new List<Movie>();
+        List<Movie> buffer = new List<Movie>();
+        List<Movie> filterResult = new List<Movie>();
 
         List<Movie> rating_list = new List<Movie>();
         public List<string> raw_list = new List<string>();
         List<string> links_list = new List<string>();
         public List<string> parsed_list = new List<string>();
         public List<Movie> final_list = new List<Movie>();
-        List<Movie> final_list_buffer = new List<Movie>();
         List<string> videoQuality_list = new List<string>(new string[] {
                                                                     "HDRip-AVC",
                                                                     "HDRip",                                                                    
@@ -184,9 +182,9 @@ namespace ratingApp
             listBox_videoQuality.SelectAll();
             listBox_audioQuality.SelectAll();
 
-            yearvideoQualityFilterListBox();
+            applyFilters();
 
-            if (yearsfilterResult.Count == 0)
+            if (filterResult.Count == 0)
             {
                 next_btn.IsEnabled = false;
             }
@@ -207,12 +205,8 @@ namespace ratingApp
             }
         }
 
-        private void yearvideoQualityFilterListBox()
+        private void applyFilters()
         {
-            yearsfilterResult.Clear();
-            videoQualityfilterResult.Clear();
-            audioQualityfilterResult.Clear();
-
             #region Select/Deselect buttons
             if (listBox_years.SelectedItems.Count == listBox_years.Items.Count)
             {
@@ -241,103 +235,158 @@ namespace ratingApp
                 button_selectAllAudio.Content = "Select all";
             } 
             #endregion
-            
-            var buffer = new List<Movie>(final_list);
+
+            buffer.Clear();
+            filterResult.Clear();
+
+            filterResult.AddRange(final_list);
 
             if (textBox_name.Text.Trim() != "")
             {
-                buffer = final_list.FindAll(listItem => listItem.Name.ToLower().Contains(textBox_name.Text.ToLower()));
+                buffer.AddRange(filterResult.FindAll(listItem => listItem.Name.ToLower().Contains(textBox_name.Text.ToLower())));
+            }
+            else
+            {
+                buffer.AddRange(filterResult);
             }
 
-            var namefilterResult = new List<Movie>(buffer);
+            filterResult.Clear();
+            filterResult.AddRange(buffer);
+            buffer.Clear();
 
-
-            foreach (var videoQualityItem in listBox_videoQuality.SelectedItems)
+            if (listBox_videoQuality.SelectedItems.Count != 0 || listBox_audioQuality.SelectedItems.Count !=0 || listBox_years.SelectedItems.Count != 0)
             {
-                buffer = namefilterResult.FindAll(listItem => listItem.videoQuality == videoQualityItem.ToString());
+                foreach (var videoQualityItem in listBox_videoQuality.SelectedItems)
+                {
+                    buffer.AddRange(filterResult.FindAll(listItem => listItem.videoQuality == videoQualityItem.ToString()));
+                }
 
-                videoQualityfilterResult.AddRange(buffer);
+                filterResult.Clear();
+                filterResult.AddRange(buffer);
+                buffer.Clear();
 
+                foreach (var audioQualityItem in listBox_audioQuality.SelectedItems)
+                {
+                    buffer.AddRange(filterResult.FindAll(listItem => listItem.audioQuality == audioQualityItem.ToString()));
+                }
+
+                filterResult.Clear();
+                filterResult.AddRange(buffer);
+                buffer.Clear();
+
+                foreach (var yearsItem in listBox_years.SelectedItems)
+                {
+                    buffer.AddRange(filterResult.FindAll(listItem => listItem.Year == yearsItem.ToString()));
+                }
+
+                filterResult.Clear();
+                filterResult.AddRange(buffer);
                 buffer.Clear();
             }
 
-
-            foreach (var audioQualityItem in listBox_audioQuality.SelectedItems)
-            {
-                buffer = videoQualityfilterResult.FindAll(listItem => listItem.audioQuality == audioQualityItem.ToString());
-
-                audioQualityfilterResult.AddRange(buffer);
-
-                buffer.Clear();
-            }
-
-            foreach (var yearsItem in listBox_years.SelectedItems)
-            {
-                buffer = audioQualityfilterResult.FindAll(listItem => listItem.Year == yearsItem.ToString());
-
-                yearsfilterResult.AddRange(buffer);
-
-                buffer.Clear();
-            }
-
-            namefilterResult.Clear();
-
-            yearsfilterResult = yearsfilterResult.OrderBy(Movie => Movie.Name).ToList();
+            filterResult = filterResult.OrderBy(Movie => Movie.Name).ToList();
 
             if (rating_list.Count != 0)
             {
-                yearsfilterResult = yearsfilterResult.OrderByDescending(Movie => Movie.Rating).ToList();
+                filterResult = filterResult.OrderByDescending(Movie => Movie.Rating).ToList();
             }
 
-            dataGrid1.ItemsSource = yearsfilterResult;
+            dataGrid1.ItemsSource = filterResult;
 
-            label5.Content = yearsfilterResult.Count.ToString();
+            label5.Content = filterResult.Count.ToString();
 
             hideColumns();
         }
 
         public void hideColumns()
         {
-
             if (!dataGrid1.Items.IsEmpty)
             {
-                int i = 0;
-                string line;
+                if (Properties.Settings.Default.ColumnsName == false)
+                    dataGrid1.Columns[0].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[0].Visibility = Visibility.Visible;
 
-                // Read the file and display it line by line.
-                var file = new System.IO.StreamReader(@".\config.ini");
+                if (Properties.Settings.Default.ColumnsNameRussian == false)
+                    dataGrid1.Columns[1].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[1].Visibility = Visibility.Visible;
 
-                var options = new string[11];
+                if (Properties.Settings.Default.ColumnsYear == false)
+                    dataGrid1.Columns[2].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[2].Visibility = Visibility.Visible;
 
-                while ((line = file.ReadLine()) != null)
-                {
-                    options[i] = line;
-                    i++;
-                }
+                if (Properties.Settings.Default.ColumnsRating == false)
+                    dataGrid1.Columns[3].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[3].Visibility = Visibility.Visible;
 
-                file.Close();
+                if (Properties.Settings.Default.ColumnsLink == false)
+                    dataGrid1.Columns[4].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[4].Visibility = Visibility.Visible;
 
-                foreach (var column in this.dataGrid1.Columns)
-                {
-                    var columnCheckBox = new CheckBox();
-                    columnCheckBox.Content = column.Header;
+                if (Properties.Settings.Default.ColumnsVideoQuality == false)
+                    dataGrid1.Columns[5].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[5].Visibility = Visibility.Visible;
 
-                    foreach (var item in options)
-                    {
-                        if (item.ToLower().Contains(column.Header.ToString().ToLower()))
-                        {
-                            if (item.ToLower().Contains("show"))
-                            {
-                                column.Visibility = System.Windows.Visibility.Visible;
-                            }
-                            else
-                            {
-                                column.Visibility = System.Windows.Visibility.Hidden;
-                            }
-                        }
-                    }
-                }
+                if (Properties.Settings.Default.ColumnsAudioQuality == false)
+                    dataGrid1.Columns[6].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[6].Visibility = Visibility.Visible;
+
+                if (Properties.Settings.Default.ColumnsPlot == false)
+                    dataGrid1.Columns[7].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[7].Visibility = Visibility.Visible;
+
+                if (Properties.Settings.Default.ColumnsPoster == false)
+                    dataGrid1.Columns[8].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[8].Visibility = Visibility.Visible;
+
             }
+            //if (!dataGrid1.Items.IsEmpty)
+            //{
+            //    int i = 0;
+            //    string line;
+
+            //    // Read the file and display it line by line.
+            //    var file = new System.IO.StreamReader(@".\config.ini");
+
+            //    var options = new string[11];
+
+            //    while ((line = file.ReadLine()) != null)
+            //    {
+            //        options[i] = line;
+            //        i++;
+            //    }
+
+            //    file.Close();
+
+            //    foreach (var column in this.dataGrid1.Columns)
+            //    {
+            //        var columnCheckBox = new CheckBox();
+            //        columnCheckBox.Content = column.Header;
+
+            //        foreach (var item in options)
+            //        {
+            //            if (item.ToLower().Contains(column.Header.ToString().ToLower()))
+            //            {
+            //                if (item.ToLower().Contains("show"))
+            //                {
+            //                    column.Visibility = System.Windows.Visibility.Visible;
+            //                }
+            //                else
+            //                {
+            //                    column.Visibility = System.Windows.Visibility.Hidden;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         public void openWebLink(string webLink)
@@ -388,11 +437,11 @@ namespace ratingApp
 
             System.Net.WebClient wc = new System.Net.WebClient();
 
-            int max = yearsfilterResult.Count;
+            int max = filterResult.Count;
             double one = 100 / max;
             int sum = 0;
 
-            foreach (Movie movie in yearsfilterResult)
+            foreach (Movie movie in filterResult)
             {
                 worker.ReportProgress(sum);
                 sum += Convert.ToInt32(one);
@@ -404,6 +453,18 @@ namespace ratingApp
                 name = name.Replace("'", "%27");
                 string query = "http://www.omdbapi.com/?t=" + name + "&y=" + movie.Year + "&r=xml";
                 string webData = wc.DownloadString(query);
+
+                string pattern = "<a href(.*?)>";
+
+                var matches = Regex.Matches(webData, pattern); // Check for href-links in movies' plot texts
+
+                if (matches.Count != 0)
+                {
+                    foreach (Match m in matches)
+                    {
+                        webData = webData.Replace(m.ToString(), "");
+                    }
+                }
 
                 var xmlMovie = new XmlDocument();
                 xmlMovie.LoadXml(webData);
@@ -449,7 +510,7 @@ namespace ratingApp
                 this.Dispatcher.Invoke((Action)(() =>
                     {
                         final_list = rating_list;
-                        yearvideoQualityFilterListBox();
+                        applyFilters();
                     }));
 
             }
@@ -468,7 +529,6 @@ namespace ratingApp
             parsed_list.Clear();
             final_list.Clear();
             links_list.Clear();
-            final_list_buffer.Clear();
         }
 
         public void RunInBackground()
@@ -696,12 +756,12 @@ namespace ratingApp
             links.Add(new RutrackerLink { ID = "2001-2005", Link = baseLink + "2091" });
             links.Add(new RutrackerLink { ID = "2006-2010", Link = baseLink + "2092" });
             links.Add(new RutrackerLink { ID = "2011-2013", Link = baseLink + "2093" });
-            links.Add(new RutrackerLink { ID = "2014",      Link = baseLink + "2200" });
+            links.Add(new RutrackerLink { ID = "2014-2015", Link = baseLink + "2200" });
 
             comboBox1.ItemsSource = links;
             comboBox1.DisplayMemberPath = "ID";
             comboBox1.SelectedValuePath = "Link";
-            comboBox1.SelectedIndex = comboBox1.Items.Count - 2;    // "2011-2013" while there's no new movies in 2014
+            comboBox1.SelectedIndex = comboBox1.Items.Count - 1;
 
         }
 
@@ -844,11 +904,6 @@ namespace ratingApp
             textBox1.Text = (1 + page / 50).ToString();           
         }
 
-        private void textBox_name_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            yearvideoQualityFilterListBox();
-        }
-
         private void select_all_qualities_btn_Click(object sender, RoutedEventArgs e)
         {
             if (listBox_videoQuality.SelectedItems.Count == listBox_videoQuality.Items.Count)
@@ -885,19 +940,14 @@ namespace ratingApp
             }
         } 
 
-        private void listBox_videoQuality_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void listBox_filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            yearvideoQualityFilterListBox();
+            applyFilters();
         }
 
-        private void listBox_audioQuality_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void textBox_name_TextChanged(object sender, TextChangedEventArgs e)
         {
-            yearvideoQualityFilterListBox();
-        } 
-
-        private void listBox_years_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            yearvideoQualityFilterListBox();
+            applyFilters();
         }
 
         private void menuItemClose_Click(object sender, RoutedEventArgs e)
@@ -970,7 +1020,7 @@ namespace ratingApp
                     openWebLink(webLink);
                 }
             }
-        }   
+        }
     }
 }
 
