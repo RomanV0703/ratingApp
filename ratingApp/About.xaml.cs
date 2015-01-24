@@ -27,7 +27,12 @@ namespace ratingApp
         private void About_Loaded(object sender, RoutedEventArgs e)
         {
             textBox1.Text = "Last Updated: " + File.GetLastWriteTime(@".\IMDB Rating.exe").ToString("dd.MM.yyyy");
-            textBlock1.Text = "IMDB Rating \nv.0.6";
+            textBlock1.Text = "IMDB Rating [Apple Fork] \nv.0.1";
+        }
+
+        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

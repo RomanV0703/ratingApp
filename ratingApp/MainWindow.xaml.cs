@@ -40,7 +40,7 @@ namespace ratingApp
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
 
             listBox_videoQuality.ItemsSource = videoQuality_list;
-
+			listBox_videoResolution.ItemsSource = videoResolution_list;
             listBox_audioQuality.ItemsSource = audioQuality_list;
 
             Closed += new EventHandler(MainWindow_Closed);
@@ -115,6 +115,7 @@ namespace ratingApp
             public string Rating { get; set; }
             public string Link { get; set; }
             public string videoQuality { get; set; }
+            public string videoResolution { get; set; }
             public string audioQuality { get; set; }
             public string Plot { get; set; }
             public string Poster { get; set; }
@@ -141,26 +142,34 @@ namespace ratingApp
         public List<string> parsed_list = new List<string>();
         public List<Movie> final_list = new List<Movie>();
         List<string> videoQuality_list = new List<string>(new string[] {
-                                                                    "HDRip-AVC",
+                                                                    //"HDRip-AVC",
                                                                     "HDRip",                                                                    
-                                                                    "BDRip-AVC",
+                                                                    //"BDRip-AVC",
                                                                     "BDRip",                                                                    
                                                                     "DVDRip",
-                                                                    "DVDScr",
-                                                                    "DVD",
-                                                                    "CAMRip",
-                                                                    "TeleSync",
+                                                                    //"DVDScr",
+                                                                    //"DVD",
+                                                                    //"CAMRip",
+                                                                    //"TeleSync",
                                                                     "SATRip",
-                                                                    "VHSRip",                                                                    
-                                                                    "DVB",   
-                                                                    "HDTVRip-AVC",
+                                                                    //"VHSRip",                                                                    
+                                                                    //"DVB",   
+                                                                    //"HDTVRip-AVC",
                                                                     "HDTVRip",
                                                                     "HDTV",
                                                                     "WEB-DLRip",
                                                                     "WEB-DL",
                                                                     "WEB-Rip",
-                                                                    "TVRip",
+                                                                    //"TVRip",
                                                                   });
+
+        List<string> videoResolution_list = new List<string>(new string[] { 
+                                                                    "480p",                                                       
+                                                                    "576p",
+                                                                    "720p",
+                                                                    "1080p"
+                                                                  });
+
         List<string> audioQuality_list = new List<string>(new string[] { 
                                                                     "AVO",                                                       
                                                                     "DVO",
@@ -180,6 +189,7 @@ namespace ratingApp
 
             listBox_years.SelectAll();
             listBox_videoQuality.SelectAll();
+            listBox_videoResolution.SelectAll();
             listBox_audioQuality.SelectAll();
 
             applyFilters();
@@ -219,11 +229,11 @@ namespace ratingApp
 
             if (listBox_videoQuality.SelectedItems.Count == listBox_videoQuality.Items.Count)
             {
-                button_selectAllVideo.Content = "Deselect all";
+                button_selectAllVideoQuality.Content = "Deselect all";
             }
             else
             {
-                button_selectAllVideo.Content = "Select all";
+                button_selectAllVideoQuality.Content = "Select all";
             }
 
             if (listBox_audioQuality.SelectedItems.Count == listBox_audioQuality.Items.Count)
@@ -332,21 +342,25 @@ namespace ratingApp
                 else
                     dataGrid1.Columns[5].Visibility = Visibility.Visible;
 
-                if (Properties.Settings.Default.ColumnsAudioQuality == false)
+                if (Properties.Settings.Default.ColumnsVideoResolution == false)
                     dataGrid1.Columns[6].Visibility = Visibility.Hidden;
                 else
                     dataGrid1.Columns[6].Visibility = Visibility.Visible;
 
-                if (Properties.Settings.Default.ColumnsPlot == false)
+                if (Properties.Settings.Default.ColumnsAudioQuality == false)
                     dataGrid1.Columns[7].Visibility = Visibility.Hidden;
                 else
                     dataGrid1.Columns[7].Visibility = Visibility.Visible;
 
-                if (Properties.Settings.Default.ColumnsPoster == false)
+                if (Properties.Settings.Default.ColumnsPlot == false)
                     dataGrid1.Columns[8].Visibility = Visibility.Hidden;
                 else
                     dataGrid1.Columns[8].Visibility = Visibility.Visible;
 
+                if (Properties.Settings.Default.ColumnsPoster == false)
+                    dataGrid1.Columns[9].Visibility = Visibility.Hidden;
+                else
+                    dataGrid1.Columns[9].Visibility = Visibility.Visible;
             }
             //if (!dataGrid1.Items.IsEmpty)
             //{
@@ -571,6 +585,25 @@ namespace ratingApp
             foreach (HtmlNode link in nodes)
             {
                 string parsedLinkText = link.InnerText.ToString();
+
+#region Subforum names hack
+                var replaceList = new List<string>(new string[] { 
+                                                                    "[Director's Cut / Режиссёрская версия]",                                                       
+                                                                    "[ATV3] ",
+                                                                    "[ATV 3] ",
+                                                                    "[ATV2] ",
+                                                                    "[ATV 2] ",
+                                                                    "[iPad] ",
+                                                                    "[iPhone] ",
+                                                                    "[Extended]",
+                                                                    "[Extended Edition] "
+                                                                  });
+                foreach (string item in replaceList)
+                {
+                    parsedLinkText = parsedLinkText.Replace(item, "");
+                } 
+#endregion
+
                 string parsedLinkAddress = link.Attributes["href"].Value.ToString();
                 int dotIndex = parsedLinkAddress.IndexOf('=');
                 parsedLinkAddress = parsedLinkAddress.Substring(dotIndex + 1);
@@ -581,23 +614,23 @@ namespace ratingApp
                 links_list.Add(parsedLinkAddress);
             }
 
-            raw_list.Remove("О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ");
-            raw_list.Remove("О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ");
-            raw_list.RemoveAll(item => item == "О РАЗМЕЩЕНИИ РЕЛИЗОВ");
+            //raw_list.Remove("О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ");
+            //raw_list.Remove("О РАЗМЕЩЕНИИ РЕЛИЗОВ");
+            //raw_list.Remove("О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ");
 
-            links_list.Remove("4494103"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     2015
+            //links_list.Remove("4494103"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     2014
 
-            links_list.Remove("1719531"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    2011-2014
-            links_list.Remove("1719477"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     2011-2014
+            //links_list.Remove("1719531"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    2011-2013
+            //links_list.Remove("1719477"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     2011-2013
 
-            links_list.Remove("1719529"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    2006-2010
-            links_list.Remove("1719475"); // О РАЗМЕЩЕНИИ РЕЛИЗОВ           2006-2010
+            //links_list.Remove("1719529"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    2006-2010
+            //links_list.Remove("1719475"); // О РАЗМЕЩЕНИИ РЕЛИЗОВ           2006-2010
 
-            links_list.Remove("1719528"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    2001-2005
-            links_list.Remove("1719471"); // О РАЗМЕЩЕНИИ РЕЛИЗОВ           2001-2005
+            //links_list.Remove("1719528"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    2001-2005
+            //links_list.Remove("1719471"); // О РАЗМЕЩЕНИИ РЕЛИЗОВ           2001-2005
 
-            links_list.Remove("3754455"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    1991-2000
-            links_list.Remove("3754459"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     1991-2000
+            //links_list.Remove("3754455"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    1991-2000
+            //links_list.Remove("3754459"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     1991-2000
 
             int linkIndex = 0;
 
@@ -633,6 +666,27 @@ namespace ratingApp
                     else
                     {
                         videoQuality = "~N/A";
+                    }
+                }
+    #endregion
+
+    #region videoResolution
+
+                string videoResolution = "";
+
+                foreach (var item in videoResolution_list)
+                {
+                    //videoQuality = item;
+
+                    if (input.ToLower().Contains(item.ToLower()))
+                    {
+                        videoResolution = item;
+                        break;
+                    }
+
+                    else
+                    {
+                        videoResolution = "~N/A";
                     }
                 }
     #endregion
@@ -702,6 +756,7 @@ namespace ratingApp
                                             Rating = string.Empty,
                                             Link = linkAddress,
                                             videoQuality = videoQuality,
+                                            videoResolution = videoResolution,
                                             audioQuality = audioQuality,
                                             NameRussian = nameRussian
                                          });
@@ -745,18 +800,15 @@ namespace ratingApp
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {            
-            this.MinHeight = 650;
+            this.MinHeight = 775;
             this.MaxHeight = 800;
 
             List<RutrackerLink> links = new List<RutrackerLink>();
 
-            string baseLink = "http://rutracker.org/forum/viewforum.php?f=";        
-            
-            links.Add(new RutrackerLink { ID = "1991-2000", Link = baseLink + "2221" });
-            links.Add(new RutrackerLink { ID = "2001-2005", Link = baseLink + "2091" });
-            links.Add(new RutrackerLink { ID = "2006-2010", Link = baseLink + "2092" });
-            links.Add(new RutrackerLink { ID = "2011-2014", Link = baseLink + "2093" });
-            links.Add(new RutrackerLink { ID = "2015", Link = baseLink + "2200" });
+            string baseLink = "http://rutracker.org/forum/viewforum.php?f=";
+
+            links.Add(new RutrackerLink { ID = "Фильмы для iPod, iPhone, iPad", Link = baseLink + "1908" });
+            links.Add(new RutrackerLink { ID = "Фильмы HD для Apple TV", Link = baseLink + "1936" });
 
             comboBox1.ItemsSource = links;
             comboBox1.DisplayMemberPath = "ID";
@@ -775,35 +827,9 @@ namespace ratingApp
 
             years_list.Clear();
 
-            var selectedItem = comboBox1.SelectedItem as RutrackerLink;
-
-            string ID = selectedItem.ID.ToString();
-
-            int indexDash = ID.IndexOf('-');
-            int year1 = 0;
-            int year2 = 0;
-
-            if (indexDash != -1)
+            for (int i = 1990; i <= 2015; i++)
             {
-                year1 = int.Parse(ID.Substring(0, indexDash));
-                year2 = int.Parse(ID.Substring(indexDash+1));
-            }
-
-            if (ID == year1 + "-" + year2)
-            {
-                for (int i = year1; i <= year2; i++)
-                {
-                    years_list.Add(i.ToString());
-                }
-
-            }
-
-            else
-            {
-                if (selectedItem.ID == "2015")
-                {
-                    years_list.Add("2015");
-                }
+                years_list.Add(i.ToString());
             }
 
             listBox_years.ItemsSource = null;
@@ -916,6 +942,18 @@ namespace ratingApp
             }
         }
 
+        private void select_all_resolutions_btn_Click(object sender, RoutedEventArgs e)
+        {
+            if (listBox_videoResolution.SelectedItems.Count == listBox_videoResolution.Items.Count)
+            {
+                listBox_videoResolution.SelectedItems.Clear();
+            }
+            else
+            {
+                listBox_videoResolution.SelectAll();
+            }
+        }
+
         private void select_all_years_btn_Click(object sender, RoutedEventArgs e)
         {
             if (listBox_years.SelectedItems.Count == listBox_years.Items.Count)
@@ -938,14 +976,14 @@ namespace ratingApp
             {
                 listBox_audioQuality.SelectAll();
             }
-        } 
+        }
 
-        private void listBox_filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void textBox_name_TextChanged(object sender, TextChangedEventArgs e)
         {
             applyFilters();
         }
 
-        private void textBox_name_TextChanged(object sender, TextChangedEventArgs e)
+        private void listBox_filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             applyFilters();
         }

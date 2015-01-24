@@ -130,5 +130,17 @@ namespace ratingApp.Properties {
                 this["ColumnsPoster"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ColumnsVideoResolution {
+            get {
+                return ((bool)(this["ColumnsVideoResolution"]));
+            }
+            set {
+                this["ColumnsVideoResolution"] = value;
+            }
+        }
     }
 }
