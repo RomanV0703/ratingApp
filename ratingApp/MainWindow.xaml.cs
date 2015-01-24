@@ -582,13 +582,13 @@ namespace ratingApp
             }
 
             raw_list.Remove("О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ");
-            raw_list.Remove("О РАЗМЕЩЕНИИ РЕЛИЗОВ");
             raw_list.Remove("О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ");
+            raw_list.RemoveAll(item => item == "О РАЗМЕЩЕНИИ РЕЛИЗОВ");
 
-            links_list.Remove("4494103"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     2014
+            links_list.Remove("4494103"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     2015
 
-            links_list.Remove("1719531"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    2011-2013
-            links_list.Remove("1719477"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     2011-2013
+            links_list.Remove("1719531"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    2011-2014
+            links_list.Remove("1719477"); // О РАЗМЕЩЕНИИ НОВЫХ РЕЛИЗОВ     2011-2014
 
             links_list.Remove("1719529"); // О ПЕРЕЗАЛИВЕ ТОРРЕНТ-ФАЙЛОВ    2006-2010
             links_list.Remove("1719475"); // О РАЗМЕЩЕНИИ РЕЛИЗОВ           2006-2010
@@ -755,8 +755,8 @@ namespace ratingApp
             links.Add(new RutrackerLink { ID = "1991-2000", Link = baseLink + "2221" });
             links.Add(new RutrackerLink { ID = "2001-2005", Link = baseLink + "2091" });
             links.Add(new RutrackerLink { ID = "2006-2010", Link = baseLink + "2092" });
-            links.Add(new RutrackerLink { ID = "2011-2013", Link = baseLink + "2093" });
-            links.Add(new RutrackerLink { ID = "2014-2015", Link = baseLink + "2200" });
+            links.Add(new RutrackerLink { ID = "2011-2014", Link = baseLink + "2093" });
+            links.Add(new RutrackerLink { ID = "2015", Link = baseLink + "2200" });
 
             comboBox1.ItemsSource = links;
             comboBox1.DisplayMemberPath = "ID";
@@ -800,9 +800,9 @@ namespace ratingApp
 
             else
             {
-                if (selectedItem.ID == "2014")
+                if (selectedItem.ID == "2015")
                 {
-                    years_list.Add("2014");
+                    years_list.Add("2015");
                 }
             }
 
