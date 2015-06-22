@@ -23,6 +23,7 @@ using System.Xml;
 using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
 using System.Net;
+using static System.Windows.SystemParameters;
 
 namespace ratingApp
 {
@@ -31,8 +32,6 @@ namespace ratingApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        //string configPath = @".\config.ini";
-
         public MainWindow()
         {
             InitializeComponent();
@@ -43,15 +42,7 @@ namespace ratingApp
 
             listBox_audioQuality.ItemsSource = audioQuality_list;
 
-            Closed += new EventHandler(MainWindow_Closed);
-
-            //File.Delete(configPath);
-
-            //if (File.Exists(configPath) == false)
-            //{
-            //    createConfig();
-            //} 
-                                 
+            Closed += new EventHandler(MainWindow_Closed);                                 
         }
 
         #region ReferencesFromResources
@@ -64,42 +55,7 @@ namespace ratingApp
             byte[] bytes = (byte[])rm.GetObject(dllName);
             return System.Reflection.Assembly.Load(bytes);
         }
-        #endregion
-
-        //void createConfig()
-        //{
-        //    //File.CreateText(configPath);
-
-        //    //if (File.Exists(configPath) == false)
-        //    //{
-        //    //    File.CreateText(configPath);
-        //    //}
-
-        //    var options = new string[11];
-
-        //    options[0] = "[Columns]";
-        //    options[1] = "";
-
-        //    int i = 2;
-
-        //    foreach (var property in typeof(Movie).GetProperties())
-        //    {
-        //        options[i] = property.Name + " = " + "show";
-        //        if (property.Name == "Poster" || property.Name == "Plot")
-        //        {
-        //            options[i] = property.Name + " = " + "hide";
-        //        }
-        //        i++;
-        //    }
-
-        //    using (System.IO.StreamWriter file = new System.IO.StreamWriter(configPath))
-        //    {
-        //        foreach (string line in options)
-        //        {
-        //            file.WriteLine(line);
-        //        }
-        //    }
-        //}
+        #endregion        
 
         void MainWindow_Closed(object sender, System.EventArgs e)
         {
@@ -173,7 +129,7 @@ namespace ratingApp
         List<string> years_list = new List<string>();
 
         private void pagesHandling()
-        { 
+        {                                     
             progressBar1.Value = 0;            
 
             ParseRutracker(comboBox1.SelectedValue.ToString() + "&start=" + page.ToString());
@@ -187,8 +143,8 @@ namespace ratingApp
             if (filterResult.Count == 0)
             {
                 next_btn.IsEnabled = false;
+                //textBox1.Text = (int.Parse(textBox1.Text) - 1).ToString();
             }
-
             else
             {
                 next_btn.IsEnabled = true;
@@ -198,7 +154,6 @@ namespace ratingApp
             {
                 previous_btn.IsEnabled = false;
             }
-
             else
             {
                 previous_btn.IsEnabled = true;
@@ -745,8 +700,10 @@ namespace ratingApp
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {            
-            this.MinHeight = 650;
-            this.MaxHeight = 800;
+            this.MinHeight = PrimaryScreenHeight * 0.9;
+            //this.MaxHeight = PrimaryScreenHeight * 0.95;
+
+            this.MinWidth = 900;           
 
             List<RutrackerLink> links = new List<RutrackerLink>();
 
@@ -762,7 +719,19 @@ namespace ratingApp
             comboBox1.DisplayMemberPath = "ID";
             comboBox1.SelectedValuePath = "Link";
             comboBox1.SelectedIndex = comboBox1.Items.Count - 1;
+        }
 
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState != WindowState.Maximized)
+            {
+                this.SizeToContent = SizeToContent.Width;
+            }
         }
 
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -981,14 +950,24 @@ namespace ratingApp
         {
             if (textBox1.Text.Trim() != "")
             {
-                page = (int.Parse(textBox1.Text) - 1) * 50;
+                int validPageNumber = 0;
+                int.TryParse(textBox1.Text, out validPageNumber);
 
-                if (page <= 0)
+                if (validPageNumber != 0)
+                {
+                    page = (int.Parse(textBox1.Text) - 1) * 50;
+
+                    if (page <= 0)
+                    {
+                        textBox1.Text = "1";
+                    }
+
+                    pagesHandling();
+                }
+                else
                 {
                     textBox1.Text = "1";
                 }
-
-                pagesHandling();
             }
 
             else

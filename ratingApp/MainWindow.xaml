@@ -1,15 +1,15 @@
 ﻿<Window x:Class="ratingApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="IMDB Rating" ResizeMode="CanResize" Loaded="Window_Loaded" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" VisualTextRenderingMode="Auto" VisualTextHintingMode="Fixed" WindowStyle="ThreeDBorderWindow" SnapsToDevicePixels="True" WindowStartupLocation="CenterScreen" d:DesignHeight="657" d:DesignWidth="850" SizeToContent="WidthAndHeight"
-        TextOptions.TextFormattingMode="Display" Icon="/IMDB%20Rating;component/Resources/imdb.ico">
+        Title="IMDB Rating" Loaded="Window_Loaded" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" VisualTextRenderingMode="Auto" VisualTextHintingMode="Fixed" WindowStyle="ThreeDBorderWindow" SnapsToDevicePixels="True" WindowStartupLocation="CenterScreen" d:DesignHeight="657" d:DesignWidth="850" SizeToContent="Width"
+        TextOptions.TextFormattingMode="Display" Icon="/IMDB%20Rating;component/Resources/imdb.ico" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Height="700" ResizeMode="CanMinimize">
     <Grid IsManipulationEnabled="False" Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="552*" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <Button Content="Rating" HorizontalAlignment="Left" Margin="12,29,0,0" Name="rating_btn" Width="129" Click="rating_btn_Click" Height="23" VerticalAlignment="Top" />
-        <DataGrid AutoGenerateColumns="True" Margin="159,86,12,10" Name="dataGrid1" MinWidth="350" MinHeight="0" IsReadOnly="True" MouseLeftButtonUp="dataGrid1_MouseLeftButtonUp" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid, AncestorLevel=1}, Path=Height}" MinColumnWidth="20">
+        <DataGrid AutoGenerateColumns="True" Margin="159,86,10,10" Name="dataGrid1" MinWidth="673" MinHeight="0" IsReadOnly="True" MouseLeftButtonUp="dataGrid1_MouseLeftButtonUp" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid, AncestorLevel=1}, Path=Height}" MinColumnWidth="20" Padding="0" BorderThickness="1" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="#19808080">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <EventSetter Event="Mouse.MouseEnter" Handler="ShowPopUp" />
@@ -19,9 +19,9 @@
             </DataGrid.RowStyle>
         </DataGrid>
         <ProgressBar HorizontalAlignment="Left" Margin="12,58,0,0" Name="progressBar1" Width="129" Height="23" VerticalAlignment="Top" />
-        
+
         <ComboBox Height="23" Margin="159,29,12,0" Name="comboBox1" VerticalAlignment="Top" SelectionChanged="comboBox1_SelectionChanged" />
-        
+
         <Label Content="videoQuality" Height="28" HorizontalAlignment="Left" Margin="12,140,0,0" Name="label1" VerticalAlignment="Top" />
         <Label Content="Year" Height="28" HorizontalAlignment="Left" Margin="14,404,0,0" Name="label2" VerticalAlignment="Top" />
 
@@ -41,9 +41,9 @@
                 <TextBlock Name="movieYear" Background="White" Foreground="Black" TextWrapping="Wrap" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="1"/>
                 <Image Name="moviePoster" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2"/>
                 <TextBlock Name="moviePlot" Background="White" Foreground="Black" TextWrapping="Wrap" HorizontalAlignment="Right" Grid.Column="1" Grid.RowSpan="3"/>
-            </Grid> 
+            </Grid>
         </Popup>
-        
+
         <Button Content="Previous" Height="23" HorizontalAlignment="Left" Margin="159,58,0,0" Name="previous_btn" VerticalAlignment="Top" Width="70" Click="previous_btn_Click" />
         <Button Content="Next" Height="23" HorizontalAlignment="Left" Margin="235,58,0,0" Name="next_btn" VerticalAlignment="Top" Width="70" Click="next_btn_Click" />
         <Label Height="28" HorizontalAlignment="Left" Margin="311,56,0,0" Name="label3" VerticalAlignment="Top" Content="Page №" />
@@ -53,10 +53,10 @@
         <ListBox Height="89" HorizontalAlignment="Left" Margin="14,430,0,0" Name="listBox_years" VerticalAlignment="Top" Width="129" SelectionMode="Multiple" SelectionChanged="listBox_filter_SelectionChanged" />
         <Button Content="Select all" Height="23" HorizontalAlignment="Left" Margin="12,241,0,0" Name="button_selectAllVideo" VerticalAlignment="Top" Width="129" Click="select_all_qualities_btn_Click" />
         <Button Content="Select all" Height="23" HorizontalAlignment="Left" Margin="12,525,0,0" Name="button_selectAllYears" VerticalAlignment="Top" Width="129" Click="select_all_years_btn_Click" />
-        
+
         <Menu Height="23" Name="menu1" VerticalAlignment="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Close" Click="menuItemClose_Click"/>
+                <MenuItem Icon="" Header="Close" Click="menuItemClose_Click"/>
             </MenuItem>
             <MenuItem Header="Edit" Visibility="Visible" IsEnabled="True">
                 <MenuItem Header="Options" Click="menuItemOptions_Click"/>
@@ -65,13 +65,13 @@
                 <MenuItem Header="About" Click="menuItemAbout_Click"/>
             </MenuItem>
         </Menu>
-        
-        <Label Content="0" Height="28" HorizontalAlignment="Left" Margin="438,56,0,0" Name="label5" VerticalAlignment="Top" />
+
+        <Label Content="0" Height="28" HorizontalAlignment="Left" Margin="434,56,0,0" Name="label5" VerticalAlignment="Top" />
         <Label Content="audioQuality" Height="28" HorizontalAlignment="Left" Margin="12,270,0,0" Name="label6" VerticalAlignment="Top" />
         <ListBox Height="71" HorizontalAlignment="Left" Margin="12,298,0,0" Name="listBox_audioQuality" SelectionMode="Multiple" VerticalAlignment="Top" Width="129" SelectionChanged="listBox_filter_SelectionChanged" />
         <Button Content="Select all" Height="23" HorizontalAlignment="Left" Margin="12,375,0,0" Name="button_selectAllAudio" VerticalAlignment="Top" Width="129" Click="button_selectAllAudio_Click" />
         <Button Content="Debug" Height="23" Margin="0,59,12,0" Name="button_debugWindow" VerticalAlignment="Top" Click="button_debugWindow_Click" HorizontalAlignment="Right" Width="75" IsEnabled="False" />
-        <TextBox Height="22" HorizontalAlignment="Left" Margin="366,59,0,0" Name="textBox1" VerticalAlignment="Top" Width="22" TextChanged="textBox1_TextChanged" Text="" GotMouseCapture="textBox1_GotMouseCapture" />
+        <TextBox Height="18" HorizontalAlignment="Left" Margin="368,60,0,0" Name="textBox1" VerticalAlignment="Top" Width="22" TextChanged="textBox1_TextChanged" Text="" GotMouseCapture="textBox1_GotMouseCapture" />
         <Label Content="Items #" Height="28" Margin="393,56,0,0" Name="label7" VerticalAlignment="Top" HorizontalAlignment="Left" Width="49" />
     </Grid>
 </Window>
