@@ -213,7 +213,7 @@ namespace ratingApp
             {
                 foreach (var videoQualityItem in listBox_videoQuality.SelectedItems)
                 {
-                    buffer.AddRange(filterResult.FindAll(listItem => listItem.videoQuality == videoQualityItem.ToString()));
+                    buffer.AddRange(filterResult.FindAll(listItem => listItem.videoQuality == videoQualityItem.ToString()));                    
                 }
 
                 filterResult.Clear();
@@ -712,18 +712,13 @@ namespace ratingApp
             links.Add(new RutrackerLink { ID = "1991-2000", Link = baseLink + "2221" });
             links.Add(new RutrackerLink { ID = "2001-2005", Link = baseLink + "2091" });
             links.Add(new RutrackerLink { ID = "2006-2010", Link = baseLink + "2092" });
-            links.Add(new RutrackerLink { ID = "2011-2014", Link = baseLink + "2093" });
-            links.Add(new RutrackerLink { ID = "2015", Link = baseLink + "2200" });
+            links.Add(new RutrackerLink { ID = "2011-2015", Link = baseLink + "2093" });
+            links.Add(new RutrackerLink { ID = "2016", Link = baseLink + "2200" });
 
             comboBox1.ItemsSource = links;
             comboBox1.DisplayMemberPath = "ID";
             comboBox1.SelectedValuePath = "Link";
             comboBox1.SelectedIndex = comboBox1.Items.Count - 1;
-        }
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-
         }
 
         private void Window_StateChanged(object sender, EventArgs e)
@@ -769,9 +764,9 @@ namespace ratingApp
 
             else
             {
-                if (selectedItem.ID == "2015")
+                if (selectedItem.ID == "2016")
                 {
-                    years_list.Add("2015");
+                    years_list.Add("2016");
                 }
             }
 

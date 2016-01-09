@@ -2,14 +2,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="IMDB Rating" Loaded="Window_Loaded" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" VisualTextRenderingMode="Auto" VisualTextHintingMode="Fixed" WindowStyle="ThreeDBorderWindow" SnapsToDevicePixels="True" WindowStartupLocation="CenterScreen" d:DesignHeight="657" d:DesignWidth="850" SizeToContent="Width"
-        TextOptions.TextFormattingMode="Display" Icon="/IMDB%20Rating;component/Resources/imdb.ico" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Height="700" ResizeMode="CanMinimize">
+        TextOptions.TextFormattingMode="Display" Icon="/IMDB%20Rating;component/Resources/imdb.ico" StateChanged="Window_StateChanged" Height="700" ResizeMode="CanMinimize">
     <Grid IsManipulationEnabled="False" Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="552*" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <Button Content="Rating" HorizontalAlignment="Left" Margin="12,29,0,0" Name="rating_btn" Width="129" Click="rating_btn_Click" Height="23" VerticalAlignment="Top" />
-        <DataGrid AutoGenerateColumns="True" Margin="159,86,10,10" Name="dataGrid1" MinWidth="673" MinHeight="0" IsReadOnly="True" MouseLeftButtonUp="dataGrid1_MouseLeftButtonUp" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid, AncestorLevel=1}, Path=Height}" MinColumnWidth="20" Padding="0" BorderThickness="1" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="#19808080">
+        <DataGrid AutoGenerateColumns="True" Margin="159,86,10,10" Name="dataGrid1" MinWidth="673" MinHeight="0" IsReadOnly="True" MouseLeftButtonUp="dataGrid1_MouseLeftButtonUp" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid, AncestorLevel=1}, Path=Height}" MinColumnWidth="20" Padding="0" BorderThickness="1" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="#54808080">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <EventSetter Event="Mouse.MouseEnter" Handler="ShowPopUp" />
