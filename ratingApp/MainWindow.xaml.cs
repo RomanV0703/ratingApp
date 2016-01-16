@@ -23,6 +23,8 @@ using System.Xml;
 using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using static System.Windows.SystemParameters;
 
 namespace ratingApp
@@ -390,13 +392,11 @@ namespace ratingApp
         {
             rating_list.Clear();
 
-            System.Net.WebClient wc = new System.Net.WebClient();
-
             int max = filterResult.Count;
             double one = 100 / max;
             int sum = 0;
 
-            foreach (Movie movie in filterResult)
+            Parallel.ForEach(filterResult, movie =>
             {
                 worker.ReportProgress(sum);
                 sum += Convert.ToInt32(one);
@@ -406,8 +406,9 @@ namespace ratingApp
                 name = name.Replace(' ', '+');
                 name = name.Replace(":", "%3A");
                 name = name.Replace("'", "%27");
+
                 string query = "http://www.omdbapi.com/?t=" + name + "&y=" + movie.Year + "&r=xml";
-                string webData = wc.DownloadString(query);
+                string webData = new WebClient().DownloadString(query);
 
                 string pattern = "<a href(.*?)>";
 
@@ -458,7 +459,7 @@ namespace ratingApp
                     Plot = plot,
                     Poster = poster
                 });
-            }
+            });
 
             try
             {
@@ -556,11 +557,12 @@ namespace ratingApp
 
             int linkIndex = 0;
 
-            foreach (var listItem in raw_list)
+            //foreach (var listItem in raw_list)
+            Parallel.ForEach(raw_list, listItem =>
             {
                 string input = listItem.ToString();
 
-    #region NameRussian
+                #region NameRussian
                 string nameRussian = "";
 
                 int indexNameRussian = input.IndexOf("/");
@@ -568,17 +570,15 @@ namespace ratingApp
                 if (indexNameRussian != -1)
                 {
                     nameRussian = input.Substring(0, indexNameRussian);
-                } 
-    #endregion
+                }
+                #endregion
 
-    #region videoQuality
+                #region videoQuality
 
                 string videoQuality = "";
 
                 foreach (var item in videoQuality_list)
                 {
-                    //videoQuality = item;
-
                     if (input.ToLower().Contains(item.ToLower()))
                     {
                         videoQuality = item;
@@ -590,9 +590,9 @@ namespace ratingApp
                         videoQuality = "~N/A";
                     }
                 }
-    #endregion
+                #endregion
 
-    #region audioQuality
+                #region audioQuality
 
                 string audioQuality = "";
 
@@ -609,9 +609,9 @@ namespace ratingApp
                         audioQuality = "~N/A";
                     }
                 }
-    #endregion
+                #endregion
 
-    #region Year
+                #region Year
                 int indexYear = input.IndexOf(") [") + 2;
                 string year = "";
 
@@ -620,10 +620,10 @@ namespace ratingApp
                     year = input.Replace(" ", string.Empty);
                     indexYear = year.IndexOf(")[") + 1;
                     year = year.Substring(indexYear + 1, 4);
-                } 
-    #endregion
+                }
+                #endregion
 
-    #region Name
+                #region Name
                 int indexBracket = input.IndexOf("(");
 
                 if (indexBracket != -1)
@@ -638,11 +638,11 @@ namespace ratingApp
                     input = input.Substring(indexSlash + 2);
 
                     indexSlash = input.IndexOf("/");
-                } 
-    #endregion
+                }
+                #endregion
 
                 parsed_list.Add(input);
-                               
+
                 string linkAddress = links_list[linkIndex];
                 linkIndex++;
 
@@ -652,16 +652,18 @@ namespace ratingApp
                     input = "";
                 }
 
-                final_list.Add(new Movie {  Name = input,
-                                            Year = year,
-                                            Rating = string.Empty,
-                                            Link = linkAddress,
-                                            videoQuality = videoQuality,
-                                            audioQuality = audioQuality,
-                                            NameRussian = nameRussian
-                                         });
-                
-            }
+                final_list.Add(new Movie
+                {
+                    Name = input,
+                    Year = year,
+                    Rating = string.Empty,
+                    Link = linkAddress,
+                    videoQuality = videoQuality,
+                    audioQuality = audioQuality,
+                    NameRussian = nameRussian
+                });
+
+            });
 
         }
 
