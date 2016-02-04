@@ -44,7 +44,7 @@ namespace ratingApp
 
             listBox_audioQuality.ItemsSource = audioQuality_list;
 
-            Closed += new EventHandler(MainWindow_Closed);                                 
+            Closed += new EventHandler(MainWindow_Closed);
         }
 
         #region ReferencesFromResources
@@ -100,17 +100,17 @@ namespace ratingApp
         public List<Movie> final_list = new List<Movie>();
         List<string> videoQuality_list = new List<string>(new string[] {
                                                                     "HDRip-AVC",
-                                                                    "HDRip",                                                                    
+                                                                    "HDRip",
                                                                     "BDRip-AVC",
-                                                                    "BDRip",                                                                    
+                                                                    "BDRip",
                                                                     "DVDRip",
                                                                     "DVDScr",
                                                                     "DVD",
                                                                     "CAMRip",
                                                                     "TeleSync",
                                                                     "SATRip",
-                                                                    "VHSRip",                                                                    
-                                                                    "DVB",   
+                                                                    "VHSRip",
+                                                                    "DVB",
                                                                     "HDTVRip-AVC",
                                                                     "HDTVRip",
                                                                     "HDTV",
@@ -119,8 +119,8 @@ namespace ratingApp
                                                                     "WEB-Rip",
                                                                     "TVRip",
                                                                   });
-        List<string> audioQuality_list = new List<string>(new string[] { 
-                                                                    "AVO",                                                       
+        List<string> audioQuality_list = new List<string>(new string[] {
+                                                                    "AVO",
                                                                     "DVO",
                                                                     "MVO",
                                                                     "VO",
@@ -131,8 +131,8 @@ namespace ratingApp
         List<string> years_list = new List<string>();
 
         private void pagesHandling()
-        {                                     
-            progressBar1.Value = 0;            
+        {
+            progressBar1.Value = 0;
 
             ParseRutracker(comboBox1.SelectedValue.ToString() + "&start=" + page.ToString());
 
@@ -190,7 +190,7 @@ namespace ratingApp
             else
             {
                 button_selectAllAudio.Content = "Select all";
-            } 
+            }
             #endregion
 
             buffer.Clear();
@@ -211,11 +211,11 @@ namespace ratingApp
             filterResult.AddRange(buffer);
             buffer.Clear();
 
-            if (listBox_videoQuality.SelectedItems.Count != 0 || listBox_audioQuality.SelectedItems.Count !=0 || listBox_years.SelectedItems.Count != 0)
+            if (listBox_videoQuality.SelectedItems.Count != 0 || listBox_audioQuality.SelectedItems.Count != 0 || listBox_years.SelectedItems.Count != 0)
             {
                 foreach (var videoQualityItem in listBox_videoQuality.SelectedItems)
                 {
-                    buffer.AddRange(filterResult.FindAll(listItem => listItem.videoQuality == videoQualityItem.ToString()));                    
+                    buffer.AddRange(filterResult.FindAll(listItem => listItem.videoQuality == videoQualityItem.ToString()));
                 }
 
                 filterResult.Clear();
@@ -408,6 +408,7 @@ namespace ratingApp
                 name = name.Replace("'", "%27");
 
                 string query = "http://www.omdbapi.com/?t=" + name + "&y=" + movie.Year + "&r=xml";
+
                 string webData = new WebClient().DownloadString(query);
 
                 string pattern = "<a href(.*?)>";
@@ -501,10 +502,12 @@ namespace ratingApp
                 OverrideEncoding = Encoding.GetEncoding("windows-1251")
             };
 
+            WebProxy proxy = new WebProxy(textBox_proxy.Text);
+
             HtmlDocument document = null;
             try
             {
-                document = webGet.Load(url);
+                document = webGet.Load(url, proxy.Address.Host, proxy.Address.Port, null, null);
             }
             catch (WebException ex)
             {
@@ -520,7 +523,7 @@ namespace ratingApp
             }
 
             if (nodes == null)
-            {                
+            {
                 return;
             }
 
@@ -701,16 +704,16 @@ namespace ratingApp
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
-        {            
+        {
             this.MinHeight = PrimaryScreenHeight * 0.9;
             //this.MaxHeight = PrimaryScreenHeight * 0.95;
 
-            this.MinWidth = 900;           
+            this.MinWidth = 900;
 
             List<RutrackerLink> links = new List<RutrackerLink>();
 
-            string baseLink = "http://rutracker.org/forum/viewforum.php?f=";        
-            
+            string baseLink = "http://rutracker.org/forum/viewforum.php?f=";
+
             links.Add(new RutrackerLink { ID = "1991-2000", Link = baseLink + "2221" });
             links.Add(new RutrackerLink { ID = "2001-2005", Link = baseLink + "2091" });
             links.Add(new RutrackerLink { ID = "2006-2010", Link = baseLink + "2092" });
@@ -734,7 +737,7 @@ namespace ratingApp
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             progressBar1.Value = 0;
-            
+
             rating_btn.IsEnabled = true;
 
             ClearAll();
@@ -752,7 +755,7 @@ namespace ratingApp
             if (indexDash != -1)
             {
                 year1 = int.Parse(ID.Substring(0, indexDash));
-                year2 = int.Parse(ID.Substring(indexDash+1));
+                year2 = int.Parse(ID.Substring(indexDash + 1));
             }
 
             if (ID == year1 + "-" + year2)
@@ -813,7 +816,7 @@ namespace ratingApp
             {
                 BitmapImage logo = new BitmapImage();
                 logo.BeginInit();
-                logo.UriSource = new Uri(selectedItem.Poster);                
+                logo.UriSource = new Uri(selectedItem.Poster);
                 logo.EndInit();
                 moviePoster.Source = logo;
                 moviePoster.Margin = new Thickness(margin, 0, margin, margin);
@@ -822,11 +825,11 @@ namespace ratingApp
 
             moviePlot.MaxWidth = 120;
             moviePlot.Text = selectedItem.Plot;
-            moviePlot.Margin = new Thickness(margin/2, margin, margin, margin);                        
+            moviePlot.Margin = new Thickness(margin / 2, margin, margin, margin);
 
             popUp.PlacementTarget = dataGridRow;
             popUp.Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse;
-            
+
             popupTimer.Interval = TimeSpan.FromMilliseconds(1000);
             popupTimer.Tick += (obj, args) =>
             {
@@ -867,7 +870,7 @@ namespace ratingApp
         private void next_btn_Click(object sender, RoutedEventArgs e)
         {
             page += 50;
-            textBox1.Text = (1 + page / 50).ToString();           
+            textBox1.Text = (1 + page / 50).ToString();
         }
 
         private void select_all_qualities_btn_Click(object sender, RoutedEventArgs e)
@@ -904,7 +907,7 @@ namespace ratingApp
             {
                 listBox_audioQuality.SelectAll();
             }
-        } 
+        }
 
         private void listBox_filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -931,7 +934,7 @@ namespace ratingApp
 
         public void menuItemAbout_Click(object sender, RoutedEventArgs e)
         {
-            Window3 aboutWindow = new Window3();            
+            Window3 aboutWindow = new Window3();
             aboutWindow.Owner = this;
             aboutWindow.Show();
         }

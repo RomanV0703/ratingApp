@@ -73,5 +73,7 @@
         <Button Content="Debug" Height="23" Margin="0,59,12,0" Name="button_debugWindow" VerticalAlignment="Top" Click="button_debugWindow_Click" HorizontalAlignment="Right" Width="75" IsEnabled="False" />
         <TextBox Height="18" HorizontalAlignment="Left" Margin="368,60,0,0" Name="textBox1" VerticalAlignment="Top" Width="22" TextChanged="textBox1_TextChanged" Text="" GotMouseCapture="textBox1_GotMouseCapture" />
         <Label Content="Items #" Height="28" Margin="393,56,0,0" Name="label7" VerticalAlignment="Top" HorizontalAlignment="Left" Width="49" />
+        <TextBox x:Name="textBox_proxy" HorizontalAlignment="Left" Margin="12,0,0,10" TextWrapping="Wrap" Width="129" Height="23" VerticalAlignment="Bottom" Text="107.151.152.210:80"/>
+        <Label x:Name="label" Content="Proxy" HorizontalAlignment="Left" Margin="12,611,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
